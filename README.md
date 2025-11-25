@@ -10,7 +10,7 @@ Run browser automation locally on a consumer-grade GPU with a variation of quant
 - ✅ Quantized models support
 - ✅ Completely self-contained (no external dependencies)
 - ✅ Optimized for LM Studio
-- ✅ Simple browser automation via Playwright
+- ✅ Browser automation via Playwright
 
 <a href="https://www.youtube.com/watch?v=cM-ApEK2biw">
    <img width="846" height="476" alt="image" src="https://github.com/user-attachments/assets/ef55585b-3904-439f-badb-0f39e88fbbd1" />
@@ -72,7 +72,7 @@ Edit `config.json` to change:
 ## Limitations
 
 - Quantized models have reduced capabilities vs full model
-- LM Studio has issues with multiple images in conversation history
+- LM Studio has issues with multiple images in the conversation history
 - Some complex tasks may cause loops (scrolling, navigation)
 
 ## Troubleshooting
@@ -85,7 +85,7 @@ Edit `config.json` to change:
 - Verify model is loaded in LM Studio
 
 **Agent looping?**
-- Try reducing temperature in LM Studio to 0.0
+- Try reducing the temperature in LM Studio to 0.0
 - Reduce `max_rounds` in config.json
 
 ## License
