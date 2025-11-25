@@ -1,12 +1,21 @@
-# Fara Standalone Agent
+# Fara Browser Automation Agent
 
-A minimal, standalone version of the Fara-7B web agent optimized for LM Studio inference.
+A local browser automation agent based on [Microsoft Fara-7B](https://www.microsoft.com/en-us/research/blog/fara-7b-an-efficient-agentic-model-for-computer-use/) model optimized for [LM Studio](https://lmstudio.ai/) inference.
+
+Run browser automation locally on a consumer-grade GPU with a variation of quantized models.
 
 ## Features
 
+- ✅ 100% local AI browser agent
+- ✅ Quantized models support
 - ✅ Completely self-contained (no external dependencies)
-- ✅ Optimized for LM Studio with single-image mode
+- ✅ Optimized for LM Studio
 - ✅ Simple browser automation via Playwright
+
+<a href="https://www.youtube.com/watch?v=cM-ApEK2biw">
+   <img width="846" height="476" alt="image" src="https://github.com/user-attachments/assets/ef55585b-3904-439f-badb-0f39e88fbbd1" />
+</a>
+
 
 ## Setup
 
@@ -37,6 +46,7 @@ python run_agent.py --task "Go to wikipedia.org and search for cats" --headful
 ```
 
 Optional debug flags (enabled by default in headful mode):
+- `headful`: displays a browser window
 - `show_overlay`: bottom-right HUD with latest model responses (hidden during screenshots)
 - `show_click_markers`: transient markers for clicks/hover/type coordinates (hidden during screenshots)
 
