@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+screenshots/
+*.log
+.venv/
+venv/
+
+AGENTS.md

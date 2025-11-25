@@ -1,0 +1,14 @@
+{
+  "model": "microsoft_fara-7b",
+  "base_url": "http://localhost:1234/v1",
+  "api_key": "lm-studio",
+  "max_rounds": 20,
+  "temperature": 0.0,
+  "save_screenshots": true,
+  "screenshots_folder": "./screenshots",
+  "max_n_images": 1,
+  "downloads_folder": "./downloads",
+  "show_overlay": true,
+  "show_click_markers": true
+}
+
