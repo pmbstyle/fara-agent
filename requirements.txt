@@ -2,4 +2,7 @@ playwright==1.51
 openai
 pillow
 tenacity
+fastapi
+uvicorn
+websockets
 

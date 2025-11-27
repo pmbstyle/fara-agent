@@ -41,6 +41,7 @@ playwright install firefox
 
 ### 3. Run the Agent
 
+#### CLI Mode
 ```bash
 python run_agent.py --task "Go to wikipedia.org and search for cats" --headful
 ```
@@ -50,11 +51,32 @@ Optional debug flags (enabled by default in headful mode):
 - `show_overlay`: bottom-right HUD with latest model responses (hidden during screenshots)
 - `show_click_markers`: transient markers for clicks/hover/type coordinates (hidden during screenshots)
 
+#### Web Interface Mode
+
+1. **Start the Backend**:
+   ```bash
+   python backend/main.py
+   ```
+   The backend will run on `http://localhost:8000`.
+
+2. **Start the Frontend**:
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   The frontend will run on `http://localhost:5173`.
+
+3. **Access the UI**:
+   Open `http://localhost:5173` in your browser.
+
 ## Configuration
 
 Edit `config.json` to change:
-- Model endpoint (default: http://localhost:1234/v1)
-- Model name
+- `base_url`: LM Studio endpoint (default: `http://localhost:1234/v1`)
+- `api_key`: API key if needed (default: `lm-studio`)
+- `model`: Model name (default: `microsoft_fara-7b`)
+- `max_rounds`: Maximum number of turns (default: 15)
 - Max rounds
 - Screenshot settings
 - Max images to keep in context (`max_n_images`, default 1)
