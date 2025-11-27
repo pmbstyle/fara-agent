@@ -28,11 +28,13 @@ class FaraAgent:
         self,
         config: Dict[str, Any],
         headless: bool = True,
-        logger: Optional[logging.Logger] = None
+        logger: Optional[logging.Logger] = None,
+        on_update: Optional[Any] = None
     ):
         self.config = config
         self.headless = headless
         self.logger = logger or logging.getLogger("fara_agent")
+        self.on_update = on_update
         self.viewport_width = 1440
         self.viewport_height = 900
         self.last_im_size: tuple[int, int] | None = None
@@ -274,6 +276,12 @@ class FaraAgent:
         
         # Get initial screenshot and create system prompt
         screenshot = await self._get_screenshot()
+        if self.on_update:
+            if asyncio.iscoroutinefunction(self.on_update):
+                await self.on_update({"type": "screenshot", "image": screenshot})
+            else:
+                self.on_update({"type": "screenshot", "image": screenshot})
+
         prompt_data = get_computer_use_system_prompt(screenshot, self.MLM_PROCESSOR_IM_CFG)
         
         # Initialize history with system prompt
@@ -320,6 +328,14 @@ class FaraAgent:
             
             response = await self._call_model(messages_for_model)
             self.logger.info(f"Model response: {response[:200]}...")
+
+            if self.on_update:
+                update_data = {"type": "model_response", "content": response}
+                if asyncio.iscoroutinefunction(self.on_update):
+                    await self.on_update(update_data)
+                else:
+                    self.on_update(update_data)
+
             # Update debug overlay for headful runs without affecting screenshots
             if self.show_overlay:
                 await self.browser.update_overlay(f"[INFO] Model response: {response}")
@@ -340,6 +356,13 @@ class FaraAgent:
             result = await self._execute_action(action_args)
             self.logger.info(f"Action result: {result}")
             
+            if self.on_update:
+                update_data = {"type": "action_result", "content": result, "action": action_args}
+                if asyncio.iscoroutinefunction(self.on_update):
+                    await self.on_update(update_data)
+                else:
+                    self.on_update(update_data)
+
             # Add to action history
             action_summary = f"{round_num+1}. {action_args.get('action')}: {result}"
             action_history.append(action_summary)
@@ -348,6 +371,12 @@ class FaraAgent:
             await asyncio.sleep(1.5)  # Wait for page to update
             screenshot = await self._get_screenshot()
             
+            if self.on_update:
+                if asyncio.iscoroutinefunction(self.on_update):
+                    await self.on_update({"type": "screenshot", "image": screenshot})
+                else:
+                    self.on_update({"type": "screenshot", "image": screenshot})
+
             # Save screenshot if enabled
             if self.save_screenshots:
                 import os
