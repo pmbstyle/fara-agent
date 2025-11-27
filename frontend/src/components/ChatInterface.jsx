@@ -2,9 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Send, Image as ImageIcon, Terminal, Play, Loader, AlertCircle, Square } from 'lucide-react';
 
 const ChatInterface = ({ messages, task, setTask, onStart, onStop, isRunning, status }) => {
-import { Send, Image as ImageIcon, Terminal, Play, Loader, AlertCircle } from 'lucide-react';
-
-const ChatInterface = ({ messages, task, setTask, onStart, isRunning, status }) => {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
