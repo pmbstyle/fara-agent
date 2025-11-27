@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Send, Image as ImageIcon, Terminal, Play, Loader, AlertCircle, Square } from 'lucide-react';
+
+const ChatInterface = ({ messages, task, setTask, onStart, onStop, isRunning, status }) => {
 import { Send, Image as ImageIcon, Terminal, Play, Loader, AlertCircle } from 'lucide-react';
 
 const ChatInterface = ({ messages, task, setTask, onStart, isRunning, status }) => {
@@ -67,6 +70,11 @@ const ChatInterface = ({ messages, task, setTask, onStart, isRunning, status }) 
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            if (isRunning) {
+                onStop();
+            } else if (task.trim()) {
+                onStart();
+            }
             if (task.trim() && !isRunning) onStart();
           }}
           className="flex gap-2"
@@ -79,14 +87,25 @@ const ChatInterface = ({ messages, task, setTask, onStart, isRunning, status }) 
             className="flex-1 bg-gray-800 border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
             disabled={isRunning}
           />
-          <button
-            type="submit"
-            disabled={!task.trim() || isRunning}
-            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
-          >
-            {isRunning ? <Loader size={18} className="animate-spin" /> : <Play size={18} />}
-            Run
-          </button>
+          {isRunning ? (
+            <button
+                type="button"
+                onClick={onStop}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+            >
+                <Square size={18} fill="currentColor" />
+                Stop
+            </button>
+          ) : (
+            <button
+                type="submit"
+                disabled={!task.trim()}
+                className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+            >
+                <Play size={18} />
+                Run
+            </button>
+          )}
         </form>
       </div>
     </div>

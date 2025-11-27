@@ -41,6 +41,7 @@ class ConnectionManager:
             await connection.send_json(message)
 
 manager = ConnectionManager()
+current_agent: FaraAgent | None = None
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -55,10 +56,17 @@ async def websocket_endpoint(websocket: WebSocket):
                 if task:
                     # Run agent in background
                     asyncio.create_task(run_agent_task(task))
+
+            elif message.get("type") == "stop_task":
+                if current_agent:
+                    current_agent.stop()
+                    await manager.broadcast({"type": "status", "content": "Stopping agent..."})
+
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 
 async def run_agent_task(task: str):
+    global current_agent
     logger = logging.getLogger("fara_agent_web")
     logger.setLevel(logging.INFO)
 
@@ -99,6 +107,7 @@ async def run_agent_task(task: str):
         logger=logger,
         on_update=on_update
     )
+    current_agent = agent
 
     try:
         await manager.broadcast({"type": "status", "content": "Agent starting..."})
@@ -109,6 +118,8 @@ async def run_agent_task(task: str):
         await manager.broadcast({"type": "error", "content": str(e)})
     finally:
         await agent.close()
+        if current_agent == agent:
+            current_agent = None
 
 if __name__ == "__main__":
     import uvicorn

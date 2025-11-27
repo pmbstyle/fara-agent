@@ -86,6 +86,15 @@ function App() {
     }
   };
 
+  const handleStop = () => {
+     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+         wsRef.current.send(JSON.stringify({
+             type: 'stop_task'
+         }));
+         setStatus('Stopping...');
+     }
+  };
+
   return (
     <div className="flex h-screen w-full bg-black">
       <ChatInterface
@@ -93,6 +102,7 @@ function App() {
         task={task}
         setTask={setTask}
         onStart={handleStart}
+        onStop={handleStop}
         isRunning={isRunning}
         status={status}
       />

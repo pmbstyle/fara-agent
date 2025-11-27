@@ -67,13 +67,19 @@ class FaraAgent:
         self.round_count = 0
         self._is_lm_studio = "1234" in str(config.get("base_url", "")) or "lm-studio" in str(config.get("api_key", ""))
         self.scroll_history: list[dict[str, Any]] = []
+        self._stopping = False
     
     async def start(self):
         """Initialize the agent"""
+        self._stopping = False
         await self.browser.start()
-        await self.browser.goto("https://www.bing.com")
         self.logger.info("Agent started")
     
+    def stop(self):
+        """Signal the agent to stop"""
+        self._stopping = True
+        self.logger.info("Agent stopping...")
+
     async def close(self):
         """Close the agent"""
         await self.browser.close()
@@ -292,6 +298,10 @@ class FaraAgent:
         
         # Main loop
         for round_num in range(self.max_rounds):
+            if self._stopping:
+                self.logger.info("Agent stopped by user request")
+                break
+
             self.round_count = round_num + 1
             self.logger.info(f"Round {self.round_count}/{self.max_rounds}")
             
